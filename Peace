@@ -1,0 +1,420 @@
+package test1;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
+
+public class Project {
+
+	public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+		Scanner scn = new Scanner(System.in);
+		String filepath;
+		boolean check, check1, check2;
+		int attempt=2;
+
+		while (true) { // This is where the while loop begins.
+			System.out.println(
+					"Hello and welcome to Peace. To login, please verify your identity.\nInsert 1 if you are an administrator.\nInsert 2 if you are a teacher.\nInsert 3 if you are a student.\nInsert 0 if you want to close the application.");
+			int userIdentification = scn.nextInt();
+
+			if (userIdentification == 1) {
+				filepath = "src\\Files\\adminLogin.txt";
+				Scanner scn2 = new Scanner(System.in);
+				Scanner scn3 = new Scanner(System.in);
+				System.out.println("Welcome back administrator, please enter your username.");
+				String username = scn2.nextLine();
+				System.out.println("Now enter your password please.");
+				String password = scn3.nextLine();
+				check = userVerification(username, password, filepath);
+				if (check == false)
+				{
+					while(attempt != 0)
+					{
+						filepath = "src\\Files\\adminLogin.txt";
+						System.out.println("You have entered incorrect credentials, you have " + attempt + " attempt left");
+						System.out.println("Please enter your username.");
+						username = scn2.nextLine();
+						System.out.println("Now enter your password please.");
+						password = scn3.nextLine();
+						check = userVerification(username, password, filepath);
+						if (check == true)
+						{
+							break;
+						}
+						else 
+						{
+							attempt--;
+						}
+					}
+					if(check == false)
+					{
+						System.out.println("You have been locked out, contact support for guidance on how to regain access to your account.");
+						return;
+					}
+				}
+
+				while (true) {
+					if (check == true) {
+						System.out.println("Enter 1 if you want to create a new user or 0 if you want to logout.");
+						Scanner scn10 = new Scanner(System.in);
+						int option2 = scn10.nextInt();
+
+						if (option2 == 1) {
+							createUsers();
+						} else if (option2 == 0) {
+							System.out.println("Goodbye " + username + "\n");
+							break;
+						}
+					}
+
+				}
+
+			} else if (userIdentification == 2) {
+				filepath = "src\\Files\\teacherLogin.txt";
+				Scanner scn4 = new Scanner(System.in);
+				Scanner scn5 = new Scanner(System.in);
+				System.out.println("Welcome back teacher, please enter your username.");
+				String username = scn4.nextLine();
+				System.out.println("Now enter your password please.");
+				String password = scn5.nextLine();
+				check1 = userVerification(username, password, filepath);
+				if (check1 == false)
+				{
+					while(attempt != 0)
+					{
+						filepath = "src\\Files\\teacherLogin.txt";
+						System.out.println("You have entered incorrect credentials, you have " + attempt + " attempt left");
+						System.out.println("Please enter your username.");
+						username = scn4.nextLine();
+						System.out.println("Now enter your password please.");
+						password = scn5.nextLine();
+						check1 = userVerification(username, password, filepath);
+						if (check1 == true)
+						{
+							break;
+						}
+						else 
+						{
+							attempt--;
+						}
+					}
+					if(attempt == 0)
+					{
+						System.out.println("You have been locked out, contact support for guidance on how to regain access to your account.");
+						return;
+					}
+				}
+
+				while (true) {
+					if (check1 == true) {
+						System.out.println(
+								"Enter 1 if you want to create questions.\nEnter 2 if you want to create an exam.\nEnter 0 if you want to logout.");
+						Scanner scn10 = new Scanner(System.in);
+						int option2 = scn10.nextInt();
+
+						if (option2 == 1) {
+							createQuestions();
+						} else if (option2 == 2) {
+							createExams();
+						} else if (option2 == 0) {
+							System.out.println("Goodbye " + username + "\n");
+							break;
+						} else {
+							System.out.println("Invalid Input.");
+						}
+					}
+
+				}
+			} else if (userIdentification == 3) {
+				filepath = "src\\Files\\studentLogin.txt";
+				Scanner scn6 = new Scanner(System.in);
+				Scanner scn7 = new Scanner(System.in);
+				System.out.println("Welcome back student, please enter your username.");
+				String username = scn6.nextLine();
+				System.out.println("Now enter your password please.");
+				String password = scn7.nextLine();
+				check2 = userVerification(username, password, filepath);
+				
+				if (check2 == false)
+				{
+					while(attempt != 0)
+					{
+						filepath = "src\\Files\\studentLogin.txt";
+						System.out.println("You have entered incorrect credentials, you have " + attempt + " attempt left");
+						System.out.println("Please enter your username.");
+						username = scn6.nextLine();
+						System.out.println("Now enter your password please.");
+						password = scn7.nextLine();
+						check2 = userVerification(username, password, filepath);
+						if (check2 == true)
+						{
+							break;
+						}
+						else 
+						{
+							attempt--;
+						}
+					}
+					if(check2 == false)
+					{
+						System.out.println("You have been locked out, contact support for guidance on how to regain access to your account.");
+						return;
+					}
+				}
+
+				while (true) {
+					if (check2 == true) {
+						System.out.println(
+								"Enter 1 if you want to view the exams available.\nEnter 0 if you want to logout.");
+						Scanner scn10 = new Scanner(System.in);
+						int option2 = scn10.nextInt();
+
+						if (option2 == 1) {
+							showExams();
+						} else if (option2 == 0) {
+							System.out.println("Goodbye " + username + "\n");
+							break;
+						} else {
+							System.out.println("Invalid Input.");
+						}
+					}
+
+				}
+			} else if (userIdentification == 0) {
+				System.out.println("Thank you for using Peace, Goodbye.");
+				return;
+			} else {
+				System.out.println("Invalid input");
+			}
+
+		} // This is where the while loop ends.
+
+	}// This is where the main function ends.
+
+	public static boolean userVerification(String username, String password, String filepath)
+			throws NoSuchAlgorithmException // This function is responsible for verifying the username and password
+											// entered by a user.
+	{
+		boolean userFound = false;
+		File file = new File(filepath);
+		String hashedPassword = Hashing.getSHA(password);
+
+		try {
+			Scanner inputBuffer = new Scanner(file);
+			while (inputBuffer.hasNext()) {
+				String line = inputBuffer.nextLine();
+				String[] values = line.split(";");
+				// System.out.println(line);
+				if (values[0].equals(username)) {
+					if (values[1].equals(hashedPassword)) {
+						userFound = true;
+						System.out.println("Login Successful\n");
+						break;
+					}
+
+				}
+			}
+			if (userFound != true) {
+				System.out.println("Invalid credentials.");
+			}
+		} catch (FileNotFoundException fe) {
+		}
+		return userFound;
+	}// This is where the function userVerification ends.
+
+	public static void createUsers() throws NoSuchAlgorithmException // This function allows administrators to create
+																		// new users.
+	{
+		while (true) // This is where the while loop begins.
+		{
+			System.out.println(
+					"Insert 1 if you want create a user for an administrator.\nInsert 2 if you want to create a user for a teacher.\nInsert 3 if you want to create a user for a student.\nInsert 0 if you want to exit.");
+			Scanner scn8 = new Scanner(System.in);
+			int createOptions = scn8.nextInt();
+			String[] credentials = null;
+			if (createOptions == 1) {
+
+				System.out.println(
+						"Please enter the credentials of the user you wish to create in this form 'username;password'.");
+				Scanner scn9 = new Scanner(System.in);
+				String newCredentials = scn9.nextLine();
+				for (int i = 0; i < 2; i++) {
+					credentials = newCredentials.split(";");
+				}
+				String username = credentials[0];
+				String password = credentials[1];
+				String hashedPassword = Hashing.getSHA(password);
+				try {
+					BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Files\\adminLogin.txt", true));
+					writer.write("\n" + username + ";" + hashedPassword);
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			} else if (createOptions == 2) {
+
+				System.out.println(
+						"Please enter the credentials of the user you wish to create in this form 'username;password'.");
+				Scanner scn9 = new Scanner(System.in);
+				String newCredentials = scn9.nextLine();
+				for (int i = 0; i < 2; i++) {
+					credentials = newCredentials.split(";");
+				}
+				String username = credentials[0];
+				String password = credentials[1];
+				String hashedPassword = Hashing.getSHA(password);
+				try {
+					BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Files\\teacherLogin.txt", true));
+					writer.write("\n" + username + ";" + hashedPassword);
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else if (createOptions == 3) {
+
+				System.out.println(
+						"Please enter the credentials of the user you wish to create in this form 'username;password'.");
+				Scanner scn9 = new Scanner(System.in);
+				String newCredentials = scn9.nextLine();
+				for (int i = 0; i < 2; i++) {
+					credentials = newCredentials.split(";");
+				}
+				String username = credentials[0];
+				String password = credentials[1];
+				String hashedPassword = Hashing.getSHA(password);
+				try {
+					BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Files\\studentLogin.txt", true));
+					writer.write("\n" + username + ";" + hashedPassword);
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else if (createOptions == 0) {
+				break;
+			}
+
+		} // This is where the while loop ends.
+		return;
+	} // This is where the function createUsers ends.
+
+	public static void createQuestions() // This function allows teachers to write new questions. (This is where it
+											// begins)
+	{
+		while (true) {
+			System.out.println("Insert 1 if you want to create a question.\nInsert 0 if you want to exit.");
+			Scanner scn10 = new Scanner(System.in);
+			int newQuestions = scn10.nextInt();
+
+			if (newQuestions == 1) {
+
+				System.out.println(
+						"Please enter the multiple choice question you wish to create in this form 'Question;A;B;C;D;Answer'.");
+				Scanner scn11 = new Scanner(System.in);
+				String newCredentials = scn11.nextLine();
+
+				try {
+					BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Files\\Questions", true));
+					writer.write("\n" + newCredentials);
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else if (newQuestions == 0) {
+				break;
+			} else {
+				System.out.println("Invalid Input.");
+			}
+		}
+		return;
+
+	}// This is where the function createQuestions ends.
+
+	public static void createExams() throws IOException // This is where the function createExams begins.
+	{
+		String[] values;
+		System.out.println("Please enter the name of the exam you want to create.");
+		Scanner scn12 = new Scanner(System.in);
+		String examName = scn12.nextLine();
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Files\\Exams", true));
+			writer.write("\n" + examName);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		while (true) {
+			System.out
+					.println("Please insert the question number you want to include in your exam or insert 0 to exit.");
+			Scanner scn13 = new Scanner(System.in);
+			int questionNumber = scn13.nextInt();
+
+			if (questionNumber == 0) {
+				return;
+			}
+
+			try {
+				BufferedReader br = new BufferedReader(new FileReader("src\\Files\\Questions"));
+				String line;
+				int lineIndex = 1;
+				boolean questionFound = false;
+
+				while ((line = br.readLine()) != null) {
+					if (lineIndex == questionNumber) {
+						values = line.split(";");
+						try {
+							BufferedWriter writer = new BufferedWriter(new FileWriter(examName, true));
+							for (int x = 0; x < 5; x++) {
+								writer.write(values[x] + "\n");
+							}
+							writer.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						questionFound = true;
+						break;
+					}
+					lineIndex++;
+				}
+				if (questionFound == false) {
+					System.out.println("The number of the question you inserted doesn't exist.\n");
+				}
+
+			} catch (FileNotFoundException fe) {
+				System.out.println(fe);
+			}
+
+		} // This is where the exterior while loop ends.
+
+	}// The function createExams ends here.
+
+	public static void showExams() throws IOException // This is where the function showExams begins. This function can
+														// only be used by students.
+	{
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("src\\Files\\Exams"));
+			String line;
+			boolean questionFound = false;
+
+			while ((line = br.readLine()) != null) {
+				System.out.println(line);
+			}
+		} catch (FileNotFoundException fe) {
+			System.out.println(fe);
+		}
+		return;
+	}// This is where the function showExams ends.
+
+}// Public class project ends here.
